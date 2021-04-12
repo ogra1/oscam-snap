@@ -1,0 +1,5 @@
+#! /bin/sh
+
+if [ ! -e $SNAP_DATA/etc/oscam/oscan.conf ]; then
+  cp -a $SNAP/etc/oscam/* $SNAP_DATA/etc/oscam/
+fi

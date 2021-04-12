@@ -1,0 +1,68 @@
+name: oscam
+base: core20
+adopt-info: oscam
+summary: OSCam is an Open Source Conditional Access Module software
+description: |
+  OSCam is an Open Source Conditional Access Module software,
+  based on the very good MpCS version 0.9d
+
+grade: stable
+confinement: strict
+
+architectures:
+  - build-on: armhf
+  - build-on: arm64
+  - build-on: amd64
+
+apps:
+   oscam:
+     command: usr/bin/oscam -c /etc/oscam -r 2
+     daemon: simple
+     plugs:
+       - hardware-observe
+       - network
+       - network-bind
+       - network-control
+       - process-control
+       - raw-usb
+       - serial-port
+       - system-observe
+   list-smargo:
+     command: usr/bin/list_smargo
+     plugs:
+       - hardware-observe
+       - network
+       - network-bind
+       - network-control
+       - raw-usb
+       - serial-port
+       - system-observe
+
+layout:
+  /etc/oscam:
+    bind: $SNAP_DATA/etc/oscam
+  /var/log/oscam:
+    bind: $SNAP_DATA/var/log/oscam
+  
+package-repositories:
+ - type: apt
+   ppa: gandalf-der-grosse/main
+
+parts:
+  oscam:
+    source: .
+    plugin: nil
+    stage-packages:
+      - libpcsclite1
+      - libpng16-16
+      - libssl1.1
+      - libusb-1.0-0
+      - oscam
+      - oscam-listsmargo
+      - usbutils
+      - zlib1g
+    override-build: |
+      #snapcraftctl build
+      VER="$(zcat $SNAPCRAFT_PART_INSTALL/usr/share/doc/oscam/changelog.Debian.gz | \
+               grep -m1 "^oscam (" | sed 's/^.*(//;s/-[0-9]ppa.*$//')"
+      snapcraftctl set-version "$VER"
