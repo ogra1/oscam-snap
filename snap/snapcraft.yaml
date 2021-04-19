@@ -6,6 +6,16 @@ description: |
   OSCam is an Open Source Conditional Access Module software,
   based on the very good MpCS version 0.9d
 
+  All configuration files can be found under
+  /var/snap/oscam/current/etc/oscam/ The Web Interface listens on
+  port 8083 by default.
+
+  Please connect the raw-usb and process-control interfaces
+  before setting up your soft CAM.
+
+  To connect USB serial readers like a smartmouse/easymouse, follow
+  the instructions at: https://snapcraft.io/docs/hotplug-support
+
 grade: stable
 confinement: strict
 
@@ -19,24 +29,19 @@ apps:
      command: usr/bin/oscam -c /etc/oscam -r 2
      daemon: simple
      plugs:
-       - hardware-observe
        - network
        - network-bind
-       - network-control
        - process-control
        - raw-usb
        - serial-port
-       - system-observe
    list-smargo:
      command: usr/bin/list_smargo
      plugs:
-       - hardware-observe
        - network
        - network-bind
-       - network-control
+       - process-control
        - raw-usb
        - serial-port
-       - system-observe
 
 layout:
   /etc/oscam:
